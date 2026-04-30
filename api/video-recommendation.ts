@@ -45,8 +45,8 @@ export default async function handler(req: any, res: any) {
   }
 
   const { topic, awareness, context } = req.body || {};
-  const serperKey = process.env.SERPER_API_KEY;
-  const geminiKey = process.env.GEMINI_API_KEY;
+  const serperKey = (globalThis as any).process?.env?.SERPER_API_KEY;
+  const geminiKey = (globalThis as any).process?.env?.GEMINI_API_KEY;
 
   if (!serperKey || !geminiKey) {
     res.status(200).json({

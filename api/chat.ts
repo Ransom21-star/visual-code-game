@@ -21,7 +21,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const { messages } = req.body || {};
-  const geminiKey = process.env.GEMINI_API_KEY;
+  const geminiKey = (globalThis as any).process?.env?.GEMINI_API_KEY;
   const prompt = (messages || [])
     .map((item: { role: string; text: string }) => `${item.role === 'user' ? 'User' : 'AEON'}: ${item.text}`)
     .join('\n') + '\nAEON:';
