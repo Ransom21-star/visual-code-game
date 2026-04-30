@@ -11,7 +11,11 @@ export interface VideoRecommendationRequest {
 
 export interface VideoRecommendationResponse {
   title: string;
-  url: string;
+  url?: string;
   channel: string;
   why: string;
+  searchTerms?: string;
+  mustCover?: string;
+  quizQuestion?: string;
+  quizHint?: string;
 }

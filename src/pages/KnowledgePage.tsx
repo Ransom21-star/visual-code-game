@@ -8,11 +8,17 @@ export default function KnowledgePage() {
   const [topic, setTopic] = useState('Manifestation Mastery');
   const [awareness, setAwareness] = useState('Intermediate');
   const [recommendation, setRecommendation] = useState<VideoRecommendationResponse | null>(null);
+  const [quizAnswer, setQuizAnswer] = useState('');
+  const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [quizResult, setQuizResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function requestVideo() {
     setLoading(true);
     setRecommendation(null);
+    setQuizAnswer('');
+    setQuizSubmitted(false);
+    setQuizResult(null);
     try {
       const payload: VideoRecommendationRequest = {
         topic,
@@ -89,13 +95,50 @@ export default function KnowledgePage() {
             </button>
             {recommendation && (
               <div className="video-card panel" style={{ marginTop: 20 }}>
-                <div className="label-small">Recommended Video</div>
+                <div className="label-small">Adaptive Recommendation</div>
                 <h3>{recommendation.title}</h3>
                 <p style={{ marginTop: 10, color: '#c7d1ff' }}>Channel: {recommendation.channel}</p>
                 <p style={{ marginTop: 10 }}>{recommendation.why}</p>
-                <a href={recommendation.url} target="_blank" rel="noreferrer">
-                  Watch on YouTube
-                </a>
+                {recommendation.url ? (
+                  <a href={recommendation.url} target="_blank" rel="noreferrer">
+                    Watch on YouTube
+                  </a>
+                ) : (
+                  <div style={{ marginTop: 18 }}>
+                    <div className="label-small">Search Guidance</div>
+                    <p>{recommendation.searchTerms}</p>
+                    <p style={{ marginTop: 8, color: '#c7d1ff' }}>{recommendation.mustCover}</p>
+                  </div>
+                )}
+                {recommendation.quizQuestion && (
+                  <div style={{ marginTop: 22 }}>
+                    <div className="label-small">Verification Quiz</div>
+                    <p>{recommendation.quizQuestion}</p>
+                    <textarea
+                      value={quizAnswer}
+                      onChange={(event) => setQuizAnswer(event.target.value)}
+                      placeholder={recommendation.quizHint || 'Answer in a sentence to confirm you watched or searched.'}
+                      disabled={quizSubmitted}
+                      style={{ marginTop: 10 }}
+                    />
+                    <button
+                      type="button"
+                      style={{ marginTop: 10 }}
+                      onClick={() => {
+                        if (!quizAnswer.trim()) {
+                          setQuizResult('Answer the quiz to move to the next recommendation.');
+                          return;
+                        }
+                        setQuizSubmitted(true);
+                        setQuizResult('Answer recorded. AEON will use this to move you to the next learning step.');
+                      }}
+                      disabled={quizSubmitted}
+                    >
+                      {quizSubmitted ? 'Quiz Completed' : 'Submit Answer'}
+                    </button>
+                    {quizResult && <p style={{ marginTop: 10, color: '#a4b0ff' }}>{quizResult}</p>}
+                  </div>
+                )}
               </div>
             )}
           </div>

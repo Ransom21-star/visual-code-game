@@ -14,7 +14,10 @@ ${searchResults
     )
     .join('\n')}
 
-Return a JSON object with keys title, url, channel, and why. Keep it concise.`;
+Return a JSON object with keys title, url, channel, why, searchTerms, mustCover, quizQuestion, and quizHint.
+If a single exact video can be recommended, provide its URL and leave searchTerms and mustCover empty.
+If a precise video is not possible, set url to an empty string and provide strong searchTerms and mustCover guidance, plus a short quizQuestion that verifies the user watched or researched the recommended content.
+`;
 }
 
 function buildVideoResponse(data: any) {
@@ -90,18 +93,26 @@ export default async function handler(req: any, res: any) {
     }
 
     res.status(200).json({
-      title: 'AEON could not parse the best video',
-      url: '#',
+      title: 'No exact video could be recommended',
+      url: '',
       channel: 'AEON',
-      why: 'The response could not be extracted. Please retry later.',
+      why: 'AEON could not find a precise match, so it is offering search guidance instead.',
+      searchTerms: `${topic} ${awareness} video overview best practices`,
+      mustCover: 'The result must explain the concept in practical terms, show real examples, and connect the material directly to the user’s growth category.',
+      quizQuestion: 'After watching or searching, what is the single key insight you learned about this topic?',
+      quizHint: 'Write a short sentence describing the core lesson you found.',
     });
   } catch (error) {
     console.error('Video recommendation failed', error);
     res.status(200).json({
       title: 'Video recommendation unavailable',
-      url: '#',
+      url: '',
       channel: 'AEON',
-      why: 'A server error occurred while generating your learning path recommendation.',
+      why: 'A server error occurred while generating your learning path recommendation. Use this guidance to continue.',
+      searchTerms: `${req.body?.topic || 'learning'} ${req.body?.awareness || 'Intermediate'} video search`,
+      mustCover: 'The result must cover the main concept with clear examples and show why it matters for your current level.',
+      quizQuestion: 'What was the most important idea this content taught you?',
+      quizHint: 'Answer using the main concept or example you found.',
     });
   }
 }
