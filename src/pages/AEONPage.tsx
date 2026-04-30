@@ -28,8 +28,12 @@ export default function AEONPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: nextMessages }),
       });
-      const data = await response.json();
-      setMessages((current) => [...current, { role: 'aeon', text: data.reply ?? 'AEON is aligning your query.' }]);
+      const data = (await response.json()) as { reply?: string };
+      const replyMessage: ChatMessage = {
+        role: 'aeon',
+        text: data.reply ?? 'AEON is aligning your query.',
+      };
+      setMessages((current) => [...current, replyMessage]);
     } catch (error) {
       setMessages((current) => [...current, { role: 'aeon', text: 'AEON could not reach the network. Check your server keys.' }]);
     } finally {
