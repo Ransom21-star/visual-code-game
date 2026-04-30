@@ -1,9 +1,3 @@
-declare const process: {
-  env: {
-    GEMINI_API_KEY?: string;
-  };
-};
-
 const GEMINI_MODEL = 'gemini-1.5-flash';
 
 function createGeminiPayload(prompt: string) {
@@ -21,7 +15,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const { messages } = req.body || {};
-  const geminiKey = (globalThis as any).process?.env?.GEMINI_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY;
   const prompt = (messages || [])
     .map((item: { role: string; text: string }) => `${item.role === 'user' ? 'User' : 'AEON'}: ${item.text}`)
     .join('\n') + '\nAEON:';

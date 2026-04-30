@@ -1,10 +1,3 @@
-declare const process: {
-  env: {
-    SERPER_API_KEY?: string;
-    GEMINI_API_KEY?: string;
-  };
-};
-
 const SERPER_SEARCH_URL = 'https://google.serper.dev/search';
 const GEMINI_MODEL = 'gemini-1.5-flash';
 
@@ -45,8 +38,8 @@ export default async function handler(req: any, res: any) {
   }
 
   const { topic, awareness, context } = req.body || {};
-  const serperKey = (globalThis as any).process?.env?.SERPER_API_KEY;
-  const geminiKey = (globalThis as any).process?.env?.GEMINI_API_KEY;
+  const serperKey = process.env.SERPER_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY;
 
   if (!serperKey || !geminiKey) {
     res.status(200).json({
