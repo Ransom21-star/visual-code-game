@@ -34,12 +34,12 @@ export default function SkillsGrowthPage() {
           </div>
         </div>
         <div className="stats-grid">
-          {[
+          {([
             ['Discipline', 78],
             ['Mindset', 72],
             ['Vitality', 69],
             ['Ambition', 83],
-          ].map(([label, value]) => (
+          ] as [string, number][]).map(([label, value]) => (
             <div key={label} className="panel" style={{ padding: 16 }}>
               <div className="label-small">{label}</div>
               <div style={{ marginTop: 10, display: 'flex', justifyContent: 'space-between', gap: 10 }}>

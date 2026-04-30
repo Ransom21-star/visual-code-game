@@ -1,3 +1,9 @@
+declare const process: {
+  env: {
+    GEMINI_API_KEY?: string;
+  };
+};
+
 const GEMINI_MODEL = 'gemini-1.5-flash';
 
 function createGeminiPayload(prompt: string) {

@@ -1,3 +1,10 @@
+declare const process: {
+  env: {
+    SERPER_API_KEY?: string;
+    GEMINI_API_KEY?: string;
+  };
+};
+
 const SERPER_SEARCH_URL = 'https://google.serper.dev/search';
 const GEMINI_MODEL = 'gemini-1.5-flash';
 

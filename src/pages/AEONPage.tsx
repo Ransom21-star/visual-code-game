@@ -16,7 +16,7 @@ export default function AEONPage() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!draft.trim()) return;
-    const nextMessages = [...messages, { role: 'user', text: draft.trim() }];
+    const nextMessages: ChatMessage[] = [...messages, { role: 'user', text: draft.trim() }];
     setMessages(nextMessages);
     setDraft('');
     setLoading(true);
